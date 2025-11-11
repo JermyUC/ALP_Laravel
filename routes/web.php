@@ -8,9 +8,22 @@ use App\Http\Controllers\SaleController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
-
-Route::get('/admin', [PlantController::class, 'index'])->name('admin'); //homepage
+Route::middleware('auth')->group(function () {
+    Route::get('/admin', function () {
+        // Check if the logged-in user has 'admin' role
+        if (auth()->user()->role === 'admin') {
+            return app(PlantController::class)->index();
+        }
+        
+        // If the user is not an admin, redirect them to the home page
+        return redirect()->route('home');
+    })->name('admin');
+});
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/', [PlantController::class, 'home'])->name('home'); //homepage
 Route::get('/about', [PageController::class, 'about'])->name('about'); //about us page
 Route::get('/store', [PlantController::class, 'shop'])->name('store'); //store page

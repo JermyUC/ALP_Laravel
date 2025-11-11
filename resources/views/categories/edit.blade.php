@@ -1,85 +1,32 @@
-<?php
+@extends('layouts.admin')
 
-namespace App\Http\Controllers;
+@section('title', 'Edit Category')
 
-use App\Models\Plant;
-use App\Models\Category;
-use Illuminate\Http\Request;
+@section('content')
+<div class="container py-4">
+    <h2>Edit Category</h2>
 
-class PlantController extends Controller
-{
-    // List all plants
-    public function index()
-    {
-        $plants = Plant::with('category')->get(); // eager load category
-        $categories = Category::all();
-        return view('plants.index', compact('plants', 'categories'));
-    }
+    <form action="{{ route('categories.update', $category->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-    // Show form to create new plant
-    public function create()
-    {
-        $categories = Category::all();
-        return view('plants.create', compact('categories'));
-    }
+        <div class="mb-3">
+            <label for="name" class="form-label">Category Name:</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $category->name) }}" required>
+        </div>
 
-    // Store new plant
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'image_url' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'stock' => 'required|integer',
-            'price' => 'required|numeric',
-        ]);
+        <div class="mb-3">
+            <label for="image_url" class="form-label">Image URL:</label>
+            <input type="text" name="image_url" id="image_url" class="form-control" value="{{ old('image_url', $category->image_url) }}">
+        </div>
 
-        Plant::create($request->only('name','image_url','category_id','stock','price'));
+        <div class="mb-3">
+            <label for="guide_text" class="form-label">Guide Text:</label>
+            <textarea name="guide_text" id="guide_text" class="form-control" rows="4">{{ old('guide_text', $category->guide_text) }}</textarea>
+        </div>
 
-        return redirect()->route('plants.index')
-                         ->with('success', 'Plant created successfully.');
-    }
-
-    // Show single plant
-    public function show($id)
-    {
-        $plant = Plant::findOrFail($id);
-        return view('plants.show', compact('plant'));
-    }
-
-    // Show edit form
-    public function edit($id)
-    {
-        $plant = Plant::findOrFail($id);
-        $categories = Category::all();
-        return view('plants.edit', compact('plant', 'categories'));
-    }
-
-    // Update plant
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required',
-            'image_url' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'stock' => 'required|integer',
-            'price' => 'required|numeric',
-        ]);
-
-        $plant = Plant::findOrFail($id);
-        $plant->update($request->only('name','image_url','category_id','stock','price'));
-
-        return redirect()->route('plants.index')
-                         ->with('success', 'Plant updated successfully.');
-    }
-
-    // Delete plant
-    public function destroy($id)
-    {
-        $plant = Plant::findOrFail($id);
-        $plant->delete();
-
-        return redirect()->route('plants.index')
-                         ->with('success', 'Plant deleted successfully.');
-    }
-}
+        <button type="submit" class="btn btn-success">Update</button>
+        <a href="{{ route('categories.index') }}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+@endsection
