@@ -20,15 +20,23 @@
   <hr>
   <h5>Meet the Team</h5>
   <div class="row">
-    <div class="col-sm-6 col-md-4 mb-3 text-center">
-      <img src="https://source.unsplash.com/200x200/?person" class="rounded-circle mb-2" alt="Team member">
-      <h6>Jermy</h6>
+    <div class="rounded-circle mb-2 mx-auto" style="width:200px;">
+      <img src="{{ asset('images/Maverick.jpeg') }}" 
+          class="rounded-circle img-fluid mb-2"
+          style="aspect-ratio: 1/1; object-fit: cover;" 
+          alt="Team member">
+      <h6>Maverick</h6>
       <p class="text-muted small">Founder & Grower</p>
     </div>
-    <div class="col-sm-6 col-md-4 mb-3 text-center">
-      <img src="https://source.unsplash.com/200x200/?woman" class="rounded-circle mb-2" alt="Team member">
-      <h6>Maverick</h6>
+    <div class="rounded-circle mb-2 mx-auto" style="width:200px;">
+      <img src="{{ asset('images/Jermy.jpeg') }}" 
+          class="rounded-circle img-fluid mb-2"
+          style="aspect-ratio: 1/1; object-fit: cover;" 
+          alt="Team member">
+      <h6>Jermy</h6>
       <p class="text-muted small">Customer Support</p>
+    </div>
+    </div>
     </div>
   </div>
 </main>
