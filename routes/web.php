@@ -55,3 +55,17 @@ Route::resource('plants', PlantController::class);
 Route::resource('users', UserController::class);
 
 Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])
+        ->name('profile.password.update');
+
+    Route::delete('/profile', [\App\Http\Controllers\ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
+});
