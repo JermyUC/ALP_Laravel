@@ -3,7 +3,7 @@
 @section('title', 'Add Plant')
 
 @section('content')
-<form action="{{ route('plants.store') }}" method="POST">
+<form action="{{ route('plants.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="mb-3">
@@ -12,8 +12,8 @@
     </div>
 
     <div class="mb-3">
-        <label>Image URL:</label>
-        <input type="text" name="image_url" class="form-control" value="{{ old('image_url') }}">
+        <label>Upload Image:</label>
+        <input type="file" name="image" class="form-control">
     </div>
 
     <div class="mb-3">
