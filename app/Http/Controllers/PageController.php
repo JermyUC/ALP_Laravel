@@ -24,5 +24,6 @@ class PageController extends Controller
         return view('profile', [
             'title' => 'Profile'
         ]);
+        
     }
 }
