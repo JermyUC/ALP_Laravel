@@ -44,28 +44,26 @@ class PlantController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'        => 'required',
+            'name' => 'required',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp,gif|max:2048',
             'category_id' => 'required',
-            'stock'       => 'required|integer',
-            'price'       => 'required|integer',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+            'stock' => 'required|numeric',
+            'price' => 'required|numeric'
         ]);
 
-        // Upload image
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('plants', 'public');
-        }
+        // Upload
+        $imagePath = $request->file('image')->store('plants', 'public');
 
         Plant::create([
-            'name'        => $request->name,
+            'name' => $request->name,
             'category_id' => $request->category_id,
-            'stock'       => $request->stock,
-            'price'       => $request->price,
-            'image_url'   => $imagePath
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'image_url' => $imagePath
         ]);
 
-        return redirect()->route('plants.index')->with('success', 'Plant created successfully.');
+        return redirect()->route('plants.index')
+                        ->with('success', 'Plant created successfully.');
     }
 
     public function show($id)
@@ -85,34 +83,29 @@ class PlantController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'        => 'required',
+            'name' => 'required',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:2048',
             'category_id' => 'required',
-            'stock'       => 'required|integer',
-            'price'       => 'required|integer',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+            'stock' => 'required|numeric',
+            'price' => 'required|numeric',
         ]);
 
         $plant = Plant::findOrFail($id);
 
-        // Handle image replace
         if ($request->hasFile('image')) {
-            // Delete old file
-            if ($plant->image_url && Storage::disk('public')->exists($plant->image_url)) {
-                Storage::disk('public')->delete($plant->image_url);
-            }
-
-            // Upload new file
-            $plant->image_url = $request->file('image')->store('plants', 'public');
+            $imagePath = $request->file('image')->store('plants', 'public');
+            $plant->image_url = $imagePath;
         }
 
         $plant->name = $request->name;
         $plant->category_id = $request->category_id;
-        $plant->stock = $request->stock;
         $plant->price = $request->price;
+        $plant->stock = $request->stock;
 
         $plant->save();
 
-        return redirect()->route('plants.index')->with('success', 'Plant updated successfully.');
+        return redirect()->route('plants.index')
+                        ->with('success', 'Plant updated successfully.');
     }
 
     public function destroy($id)

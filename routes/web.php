@@ -29,7 +29,11 @@ Route::get('/about', [PageController::class, 'about'])->name('about'); //about u
 Route::get('/profile', [PageController::class, 'profile'])->name('profile'); //user profile page
 Route::get('/store', [PlantController::class, 'shop'])->name('store'); //store page
 Route::get('/guide', [GuideController::class, 'index'])->name('guide'); //guide page
+Route::get('/signup', function () {
+    return view('signup', ['title' => 'Signup']);
+});
 
+Route::post('/signup', [AuthController::class, 'signupStore']);
 
 
 Route::resource('categories', CategoryController::class);

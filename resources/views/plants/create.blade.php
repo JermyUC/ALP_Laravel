@@ -13,7 +13,7 @@
 
     <div class="mb-3">
         <label>Upload Image:</label>
-        <input type="file" name="image" class="form-control">
+        <input type="file" name="image" class="form-control" accept="image/*">
     </div>
 
     <div class="mb-3">
