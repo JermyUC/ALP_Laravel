@@ -20,6 +20,7 @@ class Blog extends Model
         'user_id',
         'published_at',
     ];
+    //testt
 
     /**
      * Provide defaults for attributes required by DB (e.g. non-null `image_url`).
