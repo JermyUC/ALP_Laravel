@@ -22,7 +22,7 @@
 	@auth
 		@if(auth()->user()->role === 'admin')
 			<div id="createForm" class="collapse mb-4">
-				<form method="POST" action="{{ route('blogs.store') }}">
+				<form method="POST" action="{{ route('blogs.store') }}" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label>Title</label>
@@ -33,8 +33,8 @@
 						<trix-editor input="content"></trix-editor>
 					</div>
 					<div class="form-group">
-						<label>Publish at (optional)</label>
-						<input type="datetime-local" name="published_at" class="form-control" value="{{ old('published_at') }}">
+						<label>Image (optional)</label>
+						<input type="file" name="image" class="form-control-file">
 					</div>
 					<button class="btn btn-primary">Save</button>
 				</form>
@@ -45,7 +45,10 @@
 	{{-- List posts --}}
 	@forelse($blogs as $blog)
 		<div class="card mb-3">
-			<div class="card-body">
+				<div class="card-body">
+				@if($blog->image_url)
+					<img src="{{ asset($blog->image_url) }}" class="img-fluid mb-3" alt="{{ $blog->title }}">
+				@endif
 				<h3>{{ $blog->title }}</h3>
 				<p class="text-muted">By {{ optional($blog->user)->name ?? 'Unknown' }} • {{ $blog->created_at->format('M d, Y') }}</p>
 				<div class="mb-3">{!! Str::limit(strip_tags($blog->content), 500) !!}</div>
@@ -71,7 +74,7 @@
 				@auth
 					@if(auth()->user()->role === 'admin')
 						<div class="collapse mt-3" id="edit-{{ $blog->id }}">
-							<form method="POST" action="{{ route('blogs.update', $blog) }}">
+							<form method="POST" action="{{ route('blogs.update', $blog) }}" enctype="multipart/form-data">
 								@csrf
 								@method('PUT')
 								<div class="form-group">
@@ -83,8 +86,8 @@
 									<trix-editor input="content-{{ $blog->id }}"></trix-editor>
 								</div>
 								<div class="form-group">
-									<label>Publish at (optional)</label>
-									<input type="datetime-local" name="published_at" class="form-control" value="{{ optional($blog->published_at)->format('Y-m-d\TH:i') }}">
+									<label>Image (optional)</label>
+									<input type="file" name="image" class="form-control-file">
 								</div>
 								<button class="btn btn-primary">Update</button>
 							</form>
