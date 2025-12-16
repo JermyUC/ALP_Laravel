@@ -42,6 +42,14 @@ Route::post('/signup', [AuthController::class, 'signupStore']);
 // ---------------------
 Route::get('/', [PlantController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/blog', [PageController::class, 'blog'])->name('blog');
+
+// Blog CRUD routes (admin-only for write actions)
+Route::middleware(['auth', \App\Http\Middleware\CheckIfAdmin::class])->group(function () {
+    Route::post('/blog', [\App\Http\Controllers\BlogController::class, 'store'])->name('blogs.store');
+    Route::put('/blog/{blog}', [\App\Http\Controllers\BlogController::class, 'update'])->name('blogs.update');
+    Route::delete('/blog/{blog}', [\App\Http\Controllers\BlogController::class, 'destroy'])->name('blogs.destroy');
+});
 Route::get('/profile', [PageController::class, 'profile'])->name('profile');
 Route::get('/store', [PlantController::class, 'shop'])->name('store');
 Route::get('/guide', [GuideController::class, 'index'])->name('guide');
